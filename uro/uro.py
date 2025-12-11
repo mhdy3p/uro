@@ -73,7 +73,53 @@ ext_list = tuple(clean_nargs(args.blacklist)) if args.blacklist else tuple(('css
 	'pdf', 'bmp', 'eot', 'mp3', 'mp4', 'avi'
 ))
 
-vuln_params = set(['file', 'document', 'folder', 'root', 'path', 'pg', 'style', 'pdf', 'template', 'php_path', 'doc', 'page', 'name', 'cat', 'dir', 'action', 'board', 'date', 'detail', 'download', 'prefix', 'include', 'inc', 'locate', 'show', 'site', 'type', 'view', 'content', 'layout', 'mod', 'conf', 'daemon', 'upload', 'log', 'ip', 'cli', 'cmd', 'exec', 'command', 'execute', 'ping', 'query', 'jump', 'code', 'reg', 'do', 'func', 'arg', 'option', 'load', 'process', 'step', 'read', 'function', 'req', 'feature', 'exe', 'module', 'payload', 'run', 'print', 'callback', 'checkout', 'checkout_url', 'continue', 'data', 'dest', 'destination', 'domain', 'feed', 'file_name', 'file_url', 'folder_url', 'forward', 'from_url', 'go', 'goto', 'host', 'html', 'image_url', 'img_url', 'load_file', 'load_url', 'login_url', 'logout', 'navigation', 'next', 'next_page', 'Open', 'out', 'page_url', 'port', 'redir', 'redirect', 'redirect_to', 'redirect_uri', 'redirect_url', 'reference', 'return', 'return_path', 'return_to', 'returnTo', 'return_url', 'rt', 'rurl', 'target', 'to', 'uri', 'url', 'val', 'validate', 'window', 'q', 's', 'search', 'lang', 'keyword', 'keywords', 'year', 'email', 'p', 'jsonp', 'api_key', 'api', 'password', 'emailto', 'token', 'username', 'csrf_token', 'unsubscribe_token', 'id', 'item', 'page_id', 'month', 'immagine', 'list_type', 'terms', 'categoryid', 'key', 'l', 'begindate', 'enddate', 'select', 'report', 'role', 'update', 'user', 'sort', 'where', 'params', 'row', 'table', 'from', 'sel', 'results', 'sleep', 'fetch', 'order', 'column', 'field', 'delete', 'string', 'number', 'filter', 'access', 'admin', 'dbg', 'debug', 'edit', 'grant', 'test', 'alter', 'clone', 'create', 'disable', 'enable', 'make', 'modify', 'rename', 'reset', 'shell', 'toggle', 'adm', 'cfg', 'open', 'img', 'filename', 'preview', 'activity'])
+vuln_params = set([
+    # --- SSRF & LFI & Open Redirect ---
+    'file', 'document', 'folder', 'root', 'path', 'pg', 'style', 'pdf', 'template',
+    'php_path', 'doc', 'page', 'name', 'cat', 'dir', 'action', 'board', 'date',
+    'detail', 'download', 'prefix', 'include', 'inc', 'locate', 'show', 'site',
+    'type', 'view', 'content', 'layout', 'mod', 'conf', 'daemon', 'upload',
+    'log', 'ip', 'dest', 'redirect', 'uri', 'continue', 'url', 'window', 'to',
+    'out', 'navigation', 'Open', 'val', 'validate', 'domain', 'callback',
+    'return', 'page', 'feed', 'host', 'port', 'next', 'data', 'head', 'header',
+    'headers', 'img', 'filename', 'img_url', 'image_url', 'file_url', 'load_url',
+    'load_file', 'open', 'forward', 'forward_url', 'reference', 'site_url',
+    'html', 'navigator', 'u', 't', 'link', 'ret', 'r', 'rb', 'src', 'source',
+    'u', 'return_path', 'return_to', 'returnTo', 'return_url', 'rt', 'rurl',
+    'target', 'checkout', 'checkout_url', 'goto', 'next_page', 'redirect_to',
+    'redirect_uri', 'redirect_url', 'logout', 'login_url', 'page_url',
+    'go', 'succUrl', 'returnUrl', 'return_path',
+    
+    # --- RCE (Command Injection) ---
+    'cli', 'cmd', 'exec', 'command', 'execute', 'ping', 'query', 'jump', 'code',
+    'reg', 'do', 'func', 'arg', 'option', 'load', 'process', 'step', 'read',
+    'function', 'req', 'feature', 'exe', 'module', 'payload', 'run', 'print',
+    'system', 'shell', 'filter', 'access', 'admin', 'dbg', 'debug', 'edit',
+    'grant', 'test', 'alter', 'clone', 'create', 'disable', 'enable', 'make',
+    'modify', 'rename', 'reset', 'toggle', 'adm', 'cfg', 'config', 'server',
+    'message', 'email',
+    
+    # --- SQL Injection (SQLi) ---
+    'id', 'select', 'report', 'role', 'update', 'user', 'sort', 'where', 'params',
+    'row', 'table', 'from', 'sel', 'results', 'sleep', 'fetch', 'order', 'column',
+    'field', 'delete', 'string', 'number', 'filter', 'group', 'class', 'matrix',
+    'search', 'q', 's', 'keyword', 'keywords', 'query', 'ac', 'api', 'password',
+    'token', 'username', 'csrf_token', 'unsubscribe_token', 'item', 'page_id',
+    'month', 'immagine', 'list_type', 'terms', 'categoryid', 'key', 'l',
+    'begindate', 'enddate', 'desc', 'asc', 'item_id', 'user_id', 'product_id',
+    'station_id', 'msg_id', 'entry_id', 'cust_id', 'customer_id', 'client_id',
+    'order_id', 'post_id', 'link_id', 'topic_id', 'note_id', 'cat_id', 'group_id',
+    
+    # --- XSS & Client Side ---
+    'lang', 'year', 'emailto', 'p', 'jsonp', 'api_key', 'callback', 'c',
+    'v', 'variant', 'context', 'subject', 'topic', 'body', 'headline', 'title',
+    
+    # --- IDOR & Business Logic ---
+    'account', 'no', 'doc', 'key', 'email', 'profile', 'edit', 'report', 'money',
+    'amount', 'quantity', 'qty', 'balance', 'credit', 'debit', 'limit', 'role',
+    'admin', 'level', 'auth', 'authorized', 'authenticated', 'status', 'state',
+    'oauth', 'oauth_token', 'invite', 'invitation'
+])
 
 if args.whitelist:
 	ext_list = tuple(clean_nargs(args.whitelist))
@@ -173,3 +219,4 @@ def main():
 					print(host + path + dict_to_params(param))
 			else:
 				print(host + path)
+
