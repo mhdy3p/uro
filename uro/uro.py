@@ -68,9 +68,63 @@ patterns_seen = set()
 
 re_int = re.compile(r'/\d+([?/]|$)')
 
-ext_list = tuple(clean_nargs(args.blacklist)) if args.blacklist else tuple(('css', 'png', 'jpg', 'jpeg', 'svg',
-	'ico','webp', 'scss','tif','tiff','ttf','otf','woff','woff2', 'gif',
-	'pdf', 'bmp', 'eot', 'mp3', 'mp4', 'avi'
+# Extensions that should NEVER be filtered out
+whitelisted = tuple((
+    # --- PHP (Already good, slight expansion) ---
+    'php', 'php3', 'php4', 'php5', 'phtml', 'phps', 'php-s',
+
+    # --- ASP / .NET / IIS Handlers ---
+    'asp', 'aspx', 'axd', 'asmx', 'ashx', 'svc', 'config', 'asax',
+    'master', 'browser', 'config', 'cdx', 'idc', # Configuration/handler files
+
+    # --- Java / JSP / Spring / Servlet ---
+    'jsp', 'jspx', 'jsw', 'jsv', 'jspf', 'do', 'action', 'seam', 'struts',
+
+    # --- Python (Django / Flask / etc.) ---
+    'py', 'wsgi', 'pyc', # While often configuration, they indicate Python backends
+
+    # --- Ruby (Ruby on Rails) ---
+    'rb', 'rhtml', 'rjs', 'erb',
+
+    # --- ColdFusion ---
+    'cfm', 'cfml', 'cfc',
+
+    # --- Perl / CGI ---
+    'pl', 'cgi', 'pm', 'shtm', 'shtml', 'stm', # Server-Side Includes
+
+    # --- Node.js / Serverless / Modern JS ---
+    'js', 'json', 'ts', 'jsx', 'tsx', # Although JS/JSON can be static, they are often API endpoints
+
+    # --- Go / Golang ---
+    'go',
+
+    # --- Legacy / Others ---
+    'dll', 'inc', 'asa', 'htr', # Handlers/includes
+    'xml', 'wsdl', 'xsd', 'yaml', 'yml', 'toml', # Configuration/schema files, often tied to APIs/handlers
+    'txt', # For robots.txt, sitemap.xml, or files that might contain sensitive info
+    'git', 'svn', 'hg', # Source control artifacts
+    'bak', 'old', 'tmp', 'copy', # Backup/temporary files
+    'log', 'err', 'trace', # Log files
+    'zip', 'tar', 'gz', 'rar', '7z' # Archives that might contain code/configs
+))
+
+ext_list = tuple(clean_nargs(args.blacklist)) if args.blacklist else tuple((
+    # --- Images ---
+    'css', 'png', 'jpg', 'jpeg', 'svg', 'ico', 'webp', 'bmp', 'tif', 'tiff', 'gif',
+    'heic', 'avif', 'apng', 'xbm', 'cur',
+    
+    # --- Fonts ---
+    'ttf', 'otf', 'woff', 'woff2', 'eot', 'fnt',
+    
+    # --- Audio & Video ---
+    'mp3', 'mp4', 'avi', 'wav', 'mov', 'webm', 'mkv', 'flv', 'wmv', 'm4a', 
+    'aac', 'ogg', 'wma', '3gp', 'flac',
+    
+    # --- Documents (Static) ---
+    'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'rtf', 'txt', 'csv',
+    
+    # --- Web Assets & Maps ---
+    'scss', 'sass', 'less', 'map', 'swf'
 ))
 
 vuln_params = set([
@@ -219,4 +273,5 @@ def main():
 					print(host + path + dict_to_params(param))
 			else:
 				print(host + path)
+
 
